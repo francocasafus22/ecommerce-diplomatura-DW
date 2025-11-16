@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import { loginService, registerService } from "../services/userService.js";
 import { checkPassword, hashPassword } from "../utils/auth.js";
 import { createToken } from "../utils/jwt.js";
 
@@ -14,23 +15,15 @@ export default class userController {
 
   static async register(req, res) {
     try {
-      const { email } = req.body;
+      const { email, password, firstName, lastName, dni } = req.body;
 
-      const userExist = await User.findOne({ email });
-
-      if (userExist) {
-        const error = new Error("El Email ya está en uso");
-        res.status(409).json({ error: error.message });
-        return;
-      }
-
-      const user = await User.create(req.body);
-      user.password = await hashPassword(user.password);
-      await user.save();
+      await registerService({ email, password, firstName, lastName, dni });
 
       res.status(201).json({ message: "Usuario registrado correctamente" });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(error.status || 500)
+        .json({ error: error.message || "Error interno del servidor" });
     }
   }
 
@@ -38,27 +31,13 @@ export default class userController {
     try {
       const { email, password } = req.body;
 
-      const userExist = await User.findOne({ email });
-
-      if (!userExist) {
-        const error = new Error("No existe ningún usuario con ese email");
-        res.status(404).json({ error: error.message });
-        return;
-      }
-
-      const passwordCorrect = await checkPassword(password, userExist.password);
-
-      if (!passwordCorrect) {
-        const error = new Error("Contraseña incorrecta");
-        res.status(401).json({ error: error.message });
-        return;
-      }
-
-      const token = createToken({ id: userExist._id });
+      const { token } = await loginService(email, password);
 
       res.json({ token });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(error.status || 500)
+        .json({ error: error.message || "Error interno del servidor" });
     }
   }
 }
