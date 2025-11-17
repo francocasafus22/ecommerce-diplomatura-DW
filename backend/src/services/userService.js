@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 import { hashPassword } from "../utils/auth.js";
 
 export async function loginService(email, password) {

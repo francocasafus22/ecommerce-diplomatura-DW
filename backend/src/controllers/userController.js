@@ -1,7 +1,6 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 import { loginService, registerService } from "../services/userService.js";
-import { checkPassword, hashPassword } from "../utils/auth.js";
-import { createToken } from "../utils/jwt.js";
+import { logger } from "../config/winston.js";
 
 export default class userController {
   static async getAll(req, res) {
@@ -21,13 +20,14 @@ export default class userController {
 
       res.status(201).json({ message: "Usuario registrado correctamente" });
     } catch (error) {
+      logger.error(error);
       res
         .status(error.status || 500)
         .json({ error: error.message || "Error interno del servidor" });
     }
   }
 
-  static async login(req, res) {
+  static async login(req, res, next) {
     try {
       const { email, password } = req.body;
 
@@ -35,9 +35,7 @@ export default class userController {
 
       res.json({ token });
     } catch (error) {
-      res
-        .status(error.status || 500)
-        .json({ error: error.message || "Error interno del servidor" });
+      next(error);
     }
   }
 }
