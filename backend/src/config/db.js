@@ -7,8 +7,8 @@ export default async function connectDB() {
     await mongoose.connect(MONGO_URI, {
       dbName: "ecommerce",
     });
-    console.log("Base de datos conectada...");
+    console.log("BASE DE DATOS CONECTADA EXITOSAMENTE".green.bold.bgWhite);
   } catch (error) {
-    console.log("Error:", error.message);
+    console.log("[DB CONNECT]".error, `Error: ${error.message}`);
   }
 }
