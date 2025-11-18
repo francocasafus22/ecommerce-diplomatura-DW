@@ -7,11 +7,11 @@ const router = Router();
 
 router.get("/", authMiddleware, PostController.getAllByUser);
 router.post("/", authMiddleware, PostController.create);
-router.put("/:postId", authMiddleware, PostController.edit);
+router.put("/:postId", authMiddleware, validatePostExist, PostController.edit);
 router.delete(
   "/:postId",
-  validatePostExist,
   authMiddleware,
+  validatePostExist,
 
   PostController.delete,
 );

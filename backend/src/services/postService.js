@@ -21,15 +21,8 @@ export async function createPost(postData, user) {
   }
 }
 
-export async function editPost({ postData, userId, postId }) {
+export async function editPost({ data, userId, post }) {
   try {
-    const post = await Post.findById(postId);
-    if (!post) {
-      const error = new Error("El post solicitado no existe");
-      error.status = 404;
-      throw error;
-    }
-
     if (!post.author.userId.equals(userId)) {
       const error = new Error("No tienes acceso al post");
       error.status = 403;
@@ -38,10 +31,10 @@ export async function editPost({ postData, userId, postId }) {
 
     // Eliminar campos no permitidos para editar
     const forbiddenFields = ["_id", "author"];
-    const updateData = { ...postData };
+    const updateData = { ...data };
     forbiddenFields.forEach((field) => delete updateData[field]);
 
-    await Post.updateOne({ _id: postId }, updateData);
+    await post.updateOne(updateData);
   } catch (err) {
     console.error("[EDIT POST]".red.bold, `Error: ${err.message}`);
     throw err;

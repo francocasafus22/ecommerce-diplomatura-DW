@@ -26,12 +26,10 @@ export default class PostController {
 
   static async edit(req, res, next) {
     try {
-      const { postId } = req.params;
-
       await editPost({
-        postData: req.body,
+        data: req.body,
         userId: req.user._id,
-        postId,
+        post: req.post,
       });
       res.json({ message: "Post actualizado correctamente" });
     } catch (error) {
