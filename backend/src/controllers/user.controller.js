@@ -3,7 +3,7 @@ import {
   loginService,
   registerService,
   editProfile,
-} from "../services/userService.js";
+} from "../services/user.service.js";
 
 export default class userController {
   static async getAll(req, res) {

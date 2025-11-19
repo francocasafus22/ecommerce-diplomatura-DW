@@ -1,5 +1,5 @@
 import { Router } from "express";
-import PostController from "../controllers/postController.js";
+import PostController from "../controllers/post.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import { validatePostExist } from "../middlewares/post.middleware.js";
 

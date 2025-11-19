@@ -19,21 +19,21 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-    author: {
-      userId: {
-        type: Types.ObjectId,
-        ref: "User",
-        required: true,
-      },
-      authorName: {
-        type: String,
-        required: true,
-      },
-      authorAvatar: {
-        type: String,
-        default: null,
-      },
+
+    userId: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true,
     },
+    authorName: {
+      type: String,
+      required: true,
+    },
+    authorAvatar: {
+      type: String,
+      default: null,
+    },
+
     status: {
       type: String,
       enum: ["published", "draft", "archived"],
