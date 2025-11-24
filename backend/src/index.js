@@ -6,6 +6,7 @@ import postRouter from "./routes/post.routes.js";
 import commentRouter from "./routes/comment.routes.js";
 import colors from "./config/colors.js";
 import cors from "cors"
+import cookieParser from "cookie-parser"
 import {
   errorHandler,
   loggerMiddleware,
@@ -23,6 +24,7 @@ const corsOptions = {
 
 const app = express();
 
+app.use(cookieParser())
 app.use(cors(corsOptions))
 app.use(express.json());
 app.use(loggerMiddleware);

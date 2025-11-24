@@ -1,50 +1,25 @@
-import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { login } from "../services/userService";
-import { toast } from "react-toastify";
-import { loginSchema } from "../schemas/userSchema";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import InputForm from "../components/ui/InputForm";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useState } from "react";
 
-export default function LoginPage() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+export default function RegisterPage(){
 
-    const navigate = useNavigate();
+    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
-    const { mutate, isPending } = useMutation({
-        mutationFn: login,
-        onSuccess: async (data) => {       
-        toast.success(data.message, {
-            onClose: () => navigate("/"),
-            autoClose: 2000,
-        });
-        },
-        onError: async (error) => {
-        toast.error(error.message);
-        },
-    });
+    const {mutate, isPending} = useMutation({
+        mutationFn: ()=>{},
+        onSuccess: (data)=>{toast.success(data)},
+        onError: (error)=>{toast.success(error.message)}
+    })
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = {
-        email,
-        password,
-        };
-
-        const result = loginSchema.safeParse(formData);
-
-        if (!result.success) {
-        result.error.issues.map((issue) => toast.error(issue.message));
-
-        return;
-        }
-
-        mutate(formData);
-    };
-
-    return (
+        e.prevent.default()
+    }
+    return(
         <form
         className=" rounded-xl flex flex-col gap-2 w-full max-w-lg"
         onSubmit={(e) => {
@@ -53,12 +28,24 @@ export default function LoginPage() {
         >
         <div className="flex flex-col-reverse items-center gap-3">
             <p className="text-center text-2xl font-medium">
-            Sign in to <span className="bg-linear-to-r font-bold from-celeste-500 via-menta-500 to-accent-500 bg-clip-text text-transparent">Notitas</span>
+            Sign up for <span className="bg-linear-to-r font-bold from-celeste-500 via-menta-500 to-accent-500 bg-clip-text text-transparent">Notitas</span>
             </p>
 
             <img src="logo-notitas.png" alt="Logo Notitas" className="w-18" />
         </div>
 
+        
+        <InputForm
+            label={"Username"}
+            name={"username"}                        
+            placeholder={"Enter your username"}
+            value={username}
+            onChange={(e) => {
+                setUsername(e.target.value)
+            }}
+        />
+        
+        
         <InputForm
             label={"Email"}
             name={"Email"}
@@ -67,9 +54,10 @@ export default function LoginPage() {
             placeholder={"Enter your email"}
             value={email}
             onChange={(e) => {
-            setEmail(e.target.value);
+                setEmail(e.target.value)
             }}
         />
+        
         <InputForm
             label={"Password"}
             name={"Password"}
@@ -78,7 +66,7 @@ export default function LoginPage() {
             placeholder={"Enter password"}
             value={password}
             onChange={(e) => {
-            setPassword(e.target.value);
+                setPassword(e.target.value)
             }}
         ></InputForm>
 
@@ -86,18 +74,18 @@ export default function LoginPage() {
             className="
             bg-linear-to-r from-celeste-500 via-menta-500 to-accent-500
             text-warm-500 rounded-lg py-2 mt-2
-            shadow-md transition-all duration-300 cursor-pointer
+            shadow-xl transition-all duration-300 cursor-pointer
             hover:brightness-105 
         "
         >
-            {isPending ? "Cargando" : "Iniciar Sesión"}
+            {isPending ? "Cargando" : "Create account"}
         </button>
         <Link to={"/register"} className="text-sm text-center mt-5 group">
-            Don´t have an account?{" "}
+            ¿Already have an account?{" "}
             <span className="bg-linear-to-r from-celeste-500 via-menta-500 to-accent-500 bg-clip-text text-transparent font-bold ">
-            Sign up
+            Sign in
             </span>
         </Link>
         </form>
-    );
+    )
 }

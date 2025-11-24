@@ -6,8 +6,9 @@ export default function AuthLayout(){
 
     return(
         <>
-       
-            <Outlet/>
+            <div className=" min-h-screen  flex flex-col items-center justify-center px-10">
+                <Outlet/>        
+            </div>
             <ToastNotifications/>
         </>
     )

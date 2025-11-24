@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage"
 import AppLayout from "./layouts/AppLayout"
 import AuthLayout from "./layouts/AuthLayout"
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
+import RegisterPage from "./pages/RegisterPage"
 
 
 export default function Router(){
@@ -14,6 +15,7 @@ export default function Router(){
             </Route>
             <Route element={<AuthLayout/>}>
                 <Route path="/login" element={<LoginPage/>}></Route>
+                <Route path="/register" element={<RegisterPage/>}></Route>
             </Route>
         </Routes>              
     )

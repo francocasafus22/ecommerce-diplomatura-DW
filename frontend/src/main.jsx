@@ -10,7 +10,7 @@ import Router from "./router.jsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
@@ -18,5 +18,5 @@ createRoot(document.getElementById("root")).render(
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
-  </StrictMode>
+
 );

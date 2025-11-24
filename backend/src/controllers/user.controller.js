@@ -37,6 +37,7 @@ export default class userController {
       }
       const isOwner = req.user._id === user._id;
 
+    
       res.json({ user, isOwner });
     } catch (error) {
       next(error);
@@ -78,9 +79,28 @@ export default class userController {
 
       const { token } = await loginService(email, password);
 
-      res.json({ token });
+      res.cookie("AUTH_TOKEN", token, {
+        httpOnly: true,        
+        sameSite: "lax",
+        maxAge: 7*24*60*60*1000
+      })
+      
+      res.json({message: "Iniciaste sesión correctamente"})
+      
     } catch (error) {
+      
       next(error);
+    }
+  }
+  static async logout(req,res,next){
+    try{
+      res.clearCookie("AUTH_TOKEN", {
+        httpOnly: true,
+        sameSite: "lax"
+      })
+      res.json({message: "Cerraste sesión correctamente"})
+    } catch(error){
+      next(error)
     }
   }
 }

@@ -3,15 +3,9 @@ import User from "../models/User.js";
 
 export default async function authMiddleware(req, res, next) {
   try {
-    const bearer = req.headers.authorization;
+    
 
-    if (!bearer) {
-      const error = new Error("No estás autorizado");
-      error.status = 401;
-      throw error;
-    }
-
-    const [, token] = req.headers.authorization.split(" ");
+    const token = req.cookies.AUTH_TOKEN;
 
     if (!token) {
       const error = new Error("Token no válido");

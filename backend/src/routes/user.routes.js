@@ -29,5 +29,6 @@ router.post(
   userController.login,
 );
 router.put("/", authMiddleware, userController.edit);
+router.post("/logout", userController.logout)
 
 export default router;
