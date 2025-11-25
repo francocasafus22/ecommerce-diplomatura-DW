@@ -1,11 +1,12 @@
 import useAuth from "@/hooks/useAuth";
-import getAllUserPosts from "@/services/postServices";
+import {getAllUserPosts} from "@/services/postServices";
 import { getProfile } from "@/services/userService";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import {useNavigate} from "react-router-dom"
 import { Button } from "@/components/ui/button";
 import {Pen, UserRoundPen} from "lucide-react"
+import NewNoteForm from "@/components/forms/NewNoteForm";
 
 export default function ProfilePage() {
     const { username } = useParams();
@@ -227,7 +228,7 @@ export default function ProfilePage() {
             <p>Cargando...</p>
             ) : (
             <>
-                <div className="relative aspect-3/1">
+                <div className="relative aspect-3/1  mb-25">
                 <div
                     className="absolute left-1/2 -translate-x-1/2 
                     -bottom-16"
@@ -245,18 +246,17 @@ export default function ProfilePage() {
                 <img
                     src={userData.user.banner}
                     className="w-full h-full rounded-xl object-cover"
-                />
-                {userData.isOwner && <div className="absolute right-0
-                    -bottom-10 space-x-2">
-                    <Button size={"sm"} variant={"outline"}  className="cursor-pointer"><UserRoundPen/> Edit</Button>
-                    <Button className={"cursor-pointer"} variant={"default"} size={"sm"}><Pen/>Write</Button>
-                </div>}
-
+                />  
                 </div>
                 
                 
-                <p className="text-4xl font-bold mt-20">Notes</p>
-                    
+                <div className="flex  justify-between items-end">
+                    <p className="text-4xl font-bold">Notes</p>
+                    {userData.isOwner && <div className="flex  gap-2">
+                        <Button size={"sm"} variant={"outline"}  className="cursor-pointer"><UserRoundPen/> Edit</Button>
+                        <NewNoteForm/>
+                    </div>}   
+                </div>
                 
                 <div className="my-5 grid grid-cols-1 md:grid-cols-3 gap-5">
                 {posts.map((post) => (
