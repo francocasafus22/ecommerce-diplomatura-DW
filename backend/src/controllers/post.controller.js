@@ -3,6 +3,7 @@ import {
   editPost,
   findPostsByUser,
   deletePost,
+  
 } from "../services/post.service.js";
 import User from "../models/User.js";
 
@@ -21,6 +22,14 @@ export default class PostController {
       res.json({ posts });
     } catch (error) {
       next(error);
+    }
+  }
+
+  static async getOne(req,res,next){
+    try {    
+      res.json(req.post)
+    } catch (error) {
+      next(error)
     }
   }
 

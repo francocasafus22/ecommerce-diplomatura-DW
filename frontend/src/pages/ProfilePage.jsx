@@ -7,10 +7,13 @@ import {useNavigate} from "react-router-dom"
 import { Button } from "@/components/ui/button";
 import {Pen, UserRoundPen} from "lucide-react"
 import NewNoteForm from "@/components/forms/NewNoteForm";
+import { useState } from "react";
 
 export default function ProfilePage() {
     const { username } = useParams();
     const navigate = useNavigate()
+
+    const [open, setOpen] = useState(false)
 
     const {
         data: userData,
@@ -24,7 +27,7 @@ export default function ProfilePage() {
         refetchOnWindowFocus: false,
     });
 
-    /*const {
+    const {
         data: postData,
         isLoading: postIsLoading,
         isError: postIsError,        
@@ -34,7 +37,7 @@ export default function ProfilePage() {
         retry: 1,
         refetchOnWindowFocus: false,
     });
-    */
+   
     if(userIsError) return (<div className="flex flex-col items-center justify-center h-[80vh] gap-2">
         <p className="text-primary font-light">{userError.message}</p>
         <Button className={"cursor-pointer"} onClick={()=>{navigate(-1)}}>Volver</Button>
@@ -221,6 +224,7 @@ export default function ProfilePage() {
         },
     ];
     
+
     return (
         <>
         <div className="min-h-scren max-w-5xl mx-auto my-5 px-5 lg:px-0 space-y-5">
@@ -234,7 +238,7 @@ export default function ProfilePage() {
                     -bottom-16"
                 >
                     <img
-                    src={userData.user.image}
+                    src={userData.user.image || "/logo-placeholder.jpg"}
                     className="w-24 h-24 rounded-full border border-border"
                     />
                     <p className="text-center font-bold">
@@ -245,7 +249,7 @@ export default function ProfilePage() {
 
                 <img
                     src={userData.user.banner}
-                    className="w-full h-full rounded-xl object-cover"
+                    className="w-full h-full rounded-xl object-cover bg-primary"
                 />  
                 </div>
                 
@@ -254,13 +258,13 @@ export default function ProfilePage() {
                     <p className="text-4xl font-bold">Notes</p>
                     {userData.isOwner && <div className="flex  gap-2">
                         <Button size={"sm"} variant={"outline"}  className="cursor-pointer"><UserRoundPen/> Edit</Button>
-                        <NewNoteForm/>
+                        <NewNoteForm open={open} setOpen={setOpen}/>
                     </div>}   
                 </div>
                 
-                <div className="my-5 grid grid-cols-1 md:grid-cols-3 gap-5">
-                {posts.map((post) => (
-                    <div className="p-8 rounded-xl border border-border bg-secondary text-secondary-foreground shadow-md hover:shadow-xl transition-shadow duration-200 cursor-pointer" onClick={()=>{navigate(`/post/${post.slug}`)}} key={post.slug}>                                    
+                {postIsLoading ? <p className="text-primary font-medium">Loading notes...</p> : <div className="my-5 grid grid-cols-1 md:grid-cols-3 gap-5">
+                {postData.posts.map((post) => (
+                    <div className="p-8 rounded-xl border border-border bg-secondary text-secondary-foreground shadow-md hover:shadow-xl transition-shadow duration-200 cursor-pointer" onClick={()=>{navigate(`/note/${post.slug}`)}} key={post.slug}>                                    
 
                     <div className="space-y-3">
                         <h2 className="text-2xl font-semibold">
@@ -286,7 +290,9 @@ export default function ProfilePage() {
                     </div>
                     </div>
                 ))}
-                </div>
+
+                {postData.posts.length == 0 && <p className="text-muted-foreground">No posts found yet</p>}
+                </div>}
             </>
             )}
         </div>

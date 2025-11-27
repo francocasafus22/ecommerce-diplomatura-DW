@@ -20,29 +20,31 @@ import { createPost } from "@/services/postServices";
 import { toast } from "react-toastify";
 import { newNoteSchema } from "@/schemas/postSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 
 
-export default function NewNoteForm() {
-    const { register, handleSubmit, setValue, formState: {errors} } = useForm({resolver: zodResolver(newNoteSchema)});
+export default function NewNoteForm({open, setOpen}) {
+    const { register, handleSubmit, setValue, formState: {errors}, reset } = useForm({resolver: zodResolver(newNoteSchema)});    
 
     const { mutate, isPending } = useMutation({
       mutationFn: createPost,
       
       onSuccess: (data) => {
-        toast.success(data.message)
+        toast.success(data.message);
+        reset();
+        setOpen(false);        
       },
       onError: (error) => {
         toast.error(error.message)
       },
     });
 
-    const onSubmit = (data) => { 
-      console.log(data)     
+    const onSubmit = (data) => {         
         mutate(data)
     };
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
             <Button className={"cursor-pointer"} variant={"default"} size={"sm"}>
             <Pen />

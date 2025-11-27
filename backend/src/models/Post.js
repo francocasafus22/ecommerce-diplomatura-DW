@@ -51,9 +51,18 @@ const postSchema = new Schema(
   },
 );
 
-postSchema.pre("save", function (next) {
+postSchema.pre("save", async function (next) {
   if (this.isModified("title") || !this.slug) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
+    const baseSlug = slugify(this.title, { lower: true, strict: true });
+    let slug = baseSlug;
+    let counter = 1;
+
+    const Post = this.constructor;
+    while(await Post.findOne({slug})){
+      slug = `${baseSlug}-${counter++}`;
+    }
+
+    this.slug = slug;
   }
   next();
 });

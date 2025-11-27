@@ -22,3 +22,14 @@ export async function createPost (formData){
         }
     }
 }
+
+export async function getOneBySlug({slug}){
+    try {        
+        const {data} = await api.get(`/post/${slug}`);
+        return data
+    } catch (error) {
+        if(isAxiosError(error) && error.response){
+            throw new Error(error.response.data.error)
+        }
+    }
+}

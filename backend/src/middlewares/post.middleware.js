@@ -4,8 +4,17 @@ export function hasAcces(req, res, next) {}
 
 export async function validatePostExist(req, res, next) {
   try {
-    const { postId } = req.params;
-    const post = await Post.findById(postId);
+    const {postId, slug} = req.params
+    
+    if(!postId && !slug){
+      const error = new Error("No se proporcionó un ID o slug");
+      error.status=400;
+      throw error
+    }
+
+    const query = postId ? {_id: postId} : {slug: slug}
+
+    const post = await Post.findOne(query);
 
     if (!post) {
       const error = new Error("El post solicitado no existe");

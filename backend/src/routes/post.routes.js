@@ -6,6 +6,7 @@ import { validatePostExist } from "../middlewares/post.middleware.js";
 const router = Router();
 
 router.get("/user/:username", PostController.getAllByUsername);
+router.get("/:slug", validatePostExist, PostController.getOne)
 router.post("/", authMiddleware, PostController.create);
 router.put("/:postId", authMiddleware, validatePostExist, PostController.edit);
 router.delete(

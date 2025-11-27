@@ -9,6 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Button } from "./ui/button";
 
 export default function Navbar({user, logout}) {
 
@@ -30,7 +31,7 @@ export default function Navbar({user, logout}) {
             <Link to={"/explore"} className={`hover:bg-primary py-2 px-5 rounded-xl hover:text-primary-foreground cursor-pointer transition-colors duration-200 ${isActive("/explore")}`}>Write</Link>            
         </ul>
                     
-            <DropdownMenu>
+            {user ? <DropdownMenu>
             <DropdownMenuTrigger className="outline-none"><img src={user.image || "https://i.pinimg.com/736x/40/98/2a/40982a8167f0a53dedce3731178f2ef5.jpg"} className="w-12 rounded-full cursor-pointer"></img></DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -39,7 +40,7 @@ export default function Navbar({user, logout}) {
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem><button onClick={async ()=>{await logout()}}>Log out</button></DropdownMenuItem>                
             </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> : <Button onClick={()=>navigate("/login")}>Log in</Button>}
         
         </nav>
     );
