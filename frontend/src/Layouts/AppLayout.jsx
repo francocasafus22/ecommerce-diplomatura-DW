@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import Loading from "../components/ui/Loading"
 import Navbar from "../components/navbar";
+import Footer from "@/components/Footer";
 
 export default function AppLayout() {
     const { user, isLoading, logout } = useAuth();
@@ -26,9 +27,14 @@ export default function AppLayout() {
     if(!user) return null
 
     return (
-        <>  <Navbar user={user} logout={logout}/>     
-            <Outlet context={user} />
-            <ToastNotifications />
+        <>  <div className="flex flex-col min-h-screen">
+            <Navbar user={user} logout={logout}/>                 
+            <main className="flex-1">
+                <Outlet context={user}/>   
+            </main>         
+            <Footer/>
+            <ToastNotifications />        
+            </div>
         </>
     );
 }

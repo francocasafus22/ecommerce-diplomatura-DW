@@ -3,6 +3,7 @@ import Navbar from "../components/navbar";
 import { Outlet } from "react-router-dom";
 import Loading from "@/components/ui/Loading";
 import ToastNotifications from "../components/ui/ToastNotifications";
+import Footer from "@/components/Footer";
 
 
 export default function PublicLayout() {
@@ -17,9 +18,15 @@ export default function PublicLayout() {
     }
 
     return (
-        <>  <Navbar user={user} logout={logout}/>     
-            <Outlet context={user} />
+        <> 
+            <div className="flex flex-col min-h-screen">
+            <Navbar user={user} logout={logout}/>     
+            <main className="flex-1">
+                <Outlet context={user} />
+            </main>
+            <Footer/>
             <ToastNotifications />
+            </div>
         </>
     );
 }

@@ -6,12 +6,14 @@ import { getOneBySlug } from "@/services/postServices"
 import { AvatarFallback } from "@radix-ui/react-avatar"
 import { useQuery } from "@tanstack/react-query"
 import { User } from "lucide-react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
 
 export default function NotePage(){
 
     const {slug} = useParams()
+
+    const navigate = useNavigate()
 
     const {data, isLoading, isError, error} = useQuery({
         queryKey: ["note"],
@@ -22,7 +24,7 @@ export default function NotePage(){
 
     if(isError) return <p className="text-primary text-xl font-medium h-[80vh] flex items-center justify-center">{error}</p>
     if(isLoading) return <Loading screen/>
-    console.log(data)
+        
     return(
         <div className="mx-auto max-w-2xl lg:max-w-3xl xl:max-w-5xl my-10 px-5 md:px-0">
         
@@ -31,8 +33,8 @@ export default function NotePage(){
             <div className="flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 mb-15">
                 
                 <div className="flex gap-2">
-                    <Badge className={"flex gap-1 text-sm"}><Avatar className={"h-6 w-6"}>
-                    <AvatarImage src="https://i.pinimg.com/736x/40/98/2a/40982a8167f0a53dedce3731178f2ef5.jpg" alt={data.authorName}></AvatarImage>
+                    <Badge className={"flex gap-1 text-sm hover:shadow-xl transition-all duration-200 cursor-pointer"} onClick={()=>{navigate(`/${data.authorName}`)}}><Avatar className={"h-6 w-6"}>
+                    <AvatarImage src={data.authorAvatar || "/logo-placeholder.jpg"} alt={data.authorName} ></AvatarImage>
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>@{data.authorName}</Badge>      
                 <Badge variant={"secondary"}>Created {new Date(data.createdAt).toLocaleDateString()}</Badge>

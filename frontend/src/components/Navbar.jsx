@@ -22,7 +22,7 @@ export default function Navbar({user, logout}) {
         
         <div className="flex items-center gap-6">
             <div className="flex items-center gap-2 cursor-pointer">
-                <img src="/logo-notitas.png" className="w-10" onClick={()=>navigate("/")}/>            
+                <img src="/logo-notitas.png" className="w-10 " onClick={()=>navigate("/")}/>            
             </div>
         </div>
         <ul className="hidden md:flex md:gap-1">
@@ -32,11 +32,11 @@ export default function Navbar({user, logout}) {
         </ul>
                     
             {user ? <DropdownMenu>
-            <DropdownMenuTrigger className="outline-none"><img src={user.image || "https://i.pinimg.com/736x/40/98/2a/40982a8167f0a53dedce3731178f2ef5.jpg"} className="w-12 rounded-full cursor-pointer"></img></DropdownMenuTrigger>
+            <DropdownMenuTrigger className="outline-none"><img src={user.image || "https://i.pinimg.com/736x/40/98/2a/40982a8167f0a53dedce3731178f2ef5.jpg"} className="w-12 rounded-full cursor-pointer hover:shadow-2xl transition-all duration-300"></img></DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem><Link to={`/${user.username}`}>Profile</Link></DropdownMenuItem>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem><button onClick={async ()=>{await logout()}}>Log out</button></DropdownMenuItem>                
             </DropdownMenuContent>
