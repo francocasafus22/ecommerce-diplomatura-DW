@@ -1,5 +1,5 @@
 import useAuth from "@/hooks/useAuth";
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 import { Outlet } from "react-router-dom";
 import Loading from "@/components/ui/Loading";
 import ToastNotifications from "../components/ui/ToastNotifications";
