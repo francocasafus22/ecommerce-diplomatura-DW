@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 export default function HomePage() {
     const {user} = useAuth()
   return (
-    <div className="flex  flex-col items-center justify-center h-full px-5">
-      <h1 className="text-8xl font-extrabold mb-6 text-center">
+    <div className="flex mt-20 flex-col items-center justify-center h-full px-5">
+      <h1 className="text-7xl md:text-8xl font-extrabold mb-6 text-center">
         Notitas
       </h1>
       <p className="text-3xl text-center mb-4 text-gray-700">
