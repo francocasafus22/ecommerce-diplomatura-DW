@@ -19,7 +19,7 @@ export function AuthProvider({children}){
         queryKey: ["user"],
         queryFn: getUser,
         refetchOnWindowFocus: false,
-        retry: 1,
+        retry: 0,
         enabled: shouldFetchUser        
     })
 
