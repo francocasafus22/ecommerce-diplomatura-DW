@@ -86,9 +86,9 @@ export default class userController {
             return next(error)
           }
           if(result){
-            req.user.banner = result.secure_url;
+            req.user.image = result.secure_url;
             await req.user.save();
-            res.json({message: "Profile banner uploaded"})
+            res.json({message: "Profile image uploaded"})
           }
         }
         )
