@@ -102,9 +102,14 @@ export default class PostController {
     try {
       const {_id} = req.user;
 
-      const message = await like({userId: _id, post: req.post})
-      res.json({message})
+      const {message, post} = await like({userId: _id, post: req.post})
+
+      const likesCount = post?.likes.length || 0;
+      const likedByUser = post?.likes.includes(_id) || false
+
+      res.json({message, likesCount, likedByUser})
     } catch (error) {
+      error.status = 400
       next(error)
     }
   }

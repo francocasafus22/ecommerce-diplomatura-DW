@@ -23,7 +23,7 @@ import { toast } from "react-toastify";
 import { Badge } from "./ui/badge";
 import useAuth from "@/hooks/useAuth";
 
-export default function NoteCard({ post, canDelete }) {
+export default function NoteCard({ post, canDelete, canLike }) {
     const [open, setOpen] = useState(false);
     const {
         register,
@@ -60,18 +60,8 @@ export default function NoteCard({ post, canDelete }) {
         mutationFn: likePost,
         onSuccess: (data) => {
             toast.success(data.message);
-            queryClient.setQueryData(["posts"], (oldData) => {
-            if (!oldData) return oldData;
-
-            return {
-                ...oldData,
-                posts: oldData.posts.map((post) =>
-                post._id === data.postId
-                    ? { ...post, likesCount: data.likesCount, likedByUser: data.likedByUser }
-                    : post
-                ),
-            };
-            });
+            post.likedByUser = data.likedByUser;
+            post.likesCount = data.likesCount
         },
         onError: (error) => {
             toast.error(error.message)
@@ -162,9 +152,9 @@ export default function NoteCard({ post, canDelete }) {
             </div>
 
             
-            <Button className={`hover:bg-destructive transition-all duration-300 cursor-pointer ${post.likedByUser && "bg-destructive"}`} onClick={(e) => {
+           {canLike &&  <Button className={`hover:bg-destructive transition-all duration-300 cursor-pointer ${post.likedByUser && "bg-destructive"}`} onClick={(e) => {
                     e.stopPropagation(); user ? mutateLike(post._id) : navigate("/login")
-                    }}><Heart/>{post.likesCount}</Button>
+                    }}><Heart/>{post.likesCount}</Button>}
         
             </div>
         </div>

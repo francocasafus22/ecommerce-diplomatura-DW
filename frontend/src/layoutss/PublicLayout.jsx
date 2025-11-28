@@ -21,7 +21,7 @@ export default function PublicLayout() {
         <> 
             <div className="flex flex-col min-h-screen">
             <Navbar user={user} logout={logout}/>                 
-            <main className="flex-1">
+            <main className="flex-1 flex flex-col justify-center items-center">
                 <Outlet context={user} />
             </main>
             <Footer/>

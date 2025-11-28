@@ -13,7 +13,7 @@ export default function Router(){
     return(         
         <Routes>
             <Route element={<AppLayout/>}>
-                <Route path="/" element={<HomePage/>}></Route>
+                
                 <Route path="/:username" element={<ProfilePage/>}></Route>                
             </Route>
             <Route element={<AuthLayout/>}>
@@ -21,6 +21,7 @@ export default function Router(){
                 <Route path="/register" element={<RegisterPage/>}></Route>
             </Route>
             <Route element={<PublicLayout/>}>
+                <Route path="/" element={<HomePage/>}></Route>
                 <Route path="/note/:slug" element={<NotePage/>}></Route>
                 <Route path="/explore" element={<ExplorePage/>}></Route>
             </Route>

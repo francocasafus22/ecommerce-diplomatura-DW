@@ -92,13 +92,13 @@ export async function like({userId, post}){
     if(post.likes.includes(userId)){
       post.likes = post.likes.filter(id=>id.toString() !== userId.toString())
       await post.save()
-      return "Post unliked successfully"
+      return {message: "Post unliked successfully", post}
     }
 
     post.likes.push(userId)
     await post.save()
 
-    return "Post liked successfully"
+    return {post, message: "Post liked successfully"}
   } catch (error) {
     console.error("[POST LIKE]".red.bold, `Error: ${error.message}`)
     throw error

@@ -42,7 +42,7 @@ export default function ExplorePage(){
             </form>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 ">
                 {data.posts.length != 0 ? data.posts.map(post=>(
-                <NoteCard post={post} key={post._id}/>
+                <NoteCard post={post} key={post._id} canLike/>
                 )) : <p>No notes found</p>}
             </div>
 

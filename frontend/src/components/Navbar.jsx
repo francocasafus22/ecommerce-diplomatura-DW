@@ -27,18 +27,23 @@ export default function Navbar({user, logout}) {
         </div>
         <ul className="hidden md:flex md:gap-1">
             <Link to={"/"} className={`hover:bg-primary py-2 px-5 rounded-xl hover:text-primary-foreground cursor-pointer transition-colors duration-200 ${isActive("/")}`}>Home</Link>
-            <Link to={"/explore"} className={`hover:bg-primary py-2 px-5 rounded-xl hover:text-primary-foreground cursor-pointer transition-colors duration-200 ${isActive("/notes")}`}>Explore</Link>
+            <Link to={"/explore"} className={`hover:bg-primary py-2 px-5 rounded-xl hover:text-primary-foreground cursor-pointer transition-colors duration-200 ${isActive("/explore")}`}>Explore</Link>
             
         </ul>
                     
             {user ? <DropdownMenu>
             <DropdownMenuTrigger className="outline-none"><img src={user.image || "https://i.pinimg.com/736x/40/98/2a/40982a8167f0a53dedce3731178f2ef5.jpg"} className="w-12 rounded-full cursor-pointer hover:shadow-2xl transition-all duration-300"></img></DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+                <DropdownMenuItem><Link to={`/`} className="w-full">Home</Link></DropdownMenuItem>
+                <DropdownMenuItem><Link to={`/explore`} className="w-full">Explore</Link></DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem><Link to={`/${user.username}`} className="w-full">Profile</Link></DropdownMenuItem>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem><button onClick={async ()=>{await logout()}}>Log out</button></DropdownMenuItem>                
+                <DropdownMenuItem><button onClick={async ()=>{await logout()}}>Log out</button></DropdownMenuItem>   
+
+                          
             </DropdownMenuContent>
             </DropdownMenu> : <Button onClick={()=>navigate("/login")}>Log in</Button>}
         
