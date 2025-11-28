@@ -3,7 +3,7 @@ import ToastNotifications from "../components/ui/ToastNotifications";
 import { useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import Loading from "../components/ui/Loading"
-import Navbar from "../components/navbar";
+import Navbar from "../components/Navbar";
 import Footer from "@/components/Footer";
 
 export default function AppLayout() {
