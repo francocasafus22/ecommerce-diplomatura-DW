@@ -1,14 +1,18 @@
 import Comment from "../models/Comment.js";
 
-export async function getAllCommentsByPost({postId, userId}) {
+export async function getAllCommentsByPost({ postId, userId }) {
   try {
-    const comments =  await Comment.find({ postId })
+    const comments = await Comment.find({ postId })
       .sort({ createdAt: -1 })
-      .select("-__v -updatedAt").lean();
+      .select("-__v -updatedAt")
+      .lean();
 
-      if(userId) return comments.map(comment=>({...comment, isOwner: comment.userId.toString() == userId.toString()}))      
-      return comments.map(comment=>({...comment, isOwner: false}))
-    
+    if (userId)
+      return comments.map((comment) => ({
+        ...comment,
+        isOwner: comment.userId.toString() == userId.toString(),
+      }));
+    return comments.map((comment) => ({ ...comment, isOwner: false }));
   } catch (error) {
     console.error("[GET COMMENTS]".red.bold, `Error: ${error.message}`);
     next(error);
@@ -30,11 +34,12 @@ export async function createComment({ user, postId, data }) {
   }
 }
 
-export async function deleteComment({comment}){
-  try{
-
-  }catch (error) {
-    console.error("[DELETE COMMENT]".red.bold, `Error: ${error.message}`);
+export async function editComment({ oldComment, newBody }) {
+  try {
+    oldComment.body = newBody;
+    await oldComment.save();
+  } catch (error) {
+    console.error("[EDIT COMMENT]".red.bold, `Error: ${error.message}`);
     next(error);
   }
 }
