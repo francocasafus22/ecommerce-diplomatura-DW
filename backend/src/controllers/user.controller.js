@@ -4,9 +4,9 @@ import {
   registerService,
   editProfile,
 } from "../services/user.service.js";
-import formidable from "formidable"
-import cloudinary from "../config/cloudinary.js"
-import {v4 as uuid} from "uuid" 
+import formidable from "formidable";
+import cloudinary from "../config/cloudinary.js";
+import { v4 as uuid } from "uuid";
 
 export default class userController {
   static async getAll(req, res) {
@@ -18,10 +18,10 @@ export default class userController {
     }
   }
 
-  static async getUser(req,res,next){
-    try{
-      res.json(req.user)
-    }catch (error) {
+  static async getUser(req, res, next) {
+    try {
+      res.json(req.user);
+    } catch (error) {
       next(error);
     }
   }
@@ -38,11 +38,9 @@ export default class userController {
         error.status = 404;
         throw error;
       }
-      
-  
+
       const isOwner = req.user ? req.user._id.equals(user._id) : false;
 
-    
       res.json({ user, isOwner });
     } catch (error) {
       next(error);
@@ -51,91 +49,86 @@ export default class userController {
 
   static async edit(req, res, next) {
     try {
-      await editProfile({ data: req.body, user: req.user });
-
-      res.json({ message: "Perfil editado correctaments" });
+      const username = await editProfile({ data: req.body, user: req.user });
+      res.json({ message: "Perfil editado correctaments", username });
     } catch (error) {
       next(error);
     }
   }
 
-  static async editProfileImage(req,res,next){
+  static async editProfileImage(req, res, next) {
     try {
-      
-      const form = formidable({multiples: false})
-      form.parse(req, (err, fields, files) =>{ 
-        if(err){
+      const form = formidable({ multiples: false });
+      form.parse(req, (err, fields, files) => {
+        if (err) {
           const error = new Error("Error parsing form");
           error.status(400);
-          return next(error)
-        };
-        const file = files.image?.[0];
-        if(!file){
-          const error = new Error("No image uploaded")
-          error.status = 400;
-          return next(error)
-        }         
-
-        cloudinary.uploader.upload(      
-        file.filepath,
-        {public_id : uuid()},
-        async function(error, result){
-          if(error){
-            const error =  new Error("Error uploading image");
-            error.status = 500;
-            return next(error)
-          }
-          if(result){
-            req.user.image = result.secure_url;
-            await req.user.save();
-            res.json({message: "Profile image uploaded"})
-          }
+          return next(error);
         }
-        )
-      })
+        const file = files.image?.[0];
+        if (!file) {
+          const error = new Error("No image uploaded");
+          error.status = 400;
+          return next(error);
+        }
 
+        cloudinary.uploader.upload(
+          file.filepath,
+          { public_id: uuid() },
+          async function (error, result) {
+            if (error) {
+              const error = new Error("Error uploading image");
+              error.status = 500;
+              return next(error);
+            }
+            if (result) {
+              req.user.image = result.secure_url;
+              await req.user.save();
+              res.json({ message: "Profile image uploaded" });
+            }
+          },
+        );
+      });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
-  static async editProfileBanner(req,res,next){
+  static async editProfileBanner(req, res, next) {
     try {
-      
-      const form = formidable({multiples: false})
-      form.parse(req, (err, fields, files) =>{ 
-        if(err){
+      const form = formidable({ multiples: false });
+      form.parse(req, (err, fields, files) => {
+        if (err) {
           const error = new Error("Error parsing form");
           error.status(400);
-          return next(error)
-        };
-        const file = files.banner?.[0];
-        if(!file){
-          const error = new Error("No image uploaded")
-          error.status = 400;
-          return next(error)
-        }        
-
-        cloudinary.uploader.upload(      
-        file.filepath,
-        {public_id : uuid()},
-        async function(error, result){
-          if(error){
-            const error =  new Error("Error uploading image");
-            error.status = 500;
-            return next(error)
-          }
-          if(result){
-            req.user.banner = result.secure_url;
-            await req.user.save();
-            res.json({message: "Profile banner uploaded"})
-          }
+          return next(error);
         }
-        )
-      })
+        const file = files.banner?.[0];
+        if (!file) {
+          const error = new Error("No image uploaded");
+          error.status = 400;
+          return next(error);
+        }
 
+        cloudinary.uploader.upload(
+          file.filepath,
+          { public_id: uuid() },
+          async function (error, result) {
+            if (error) {
+              const error = new Error("Error uploading image");
+              error.status = 500;
+              return next(error);
+            }
+            if (result) {
+              req.user.banner = result.secure_url;
+              await req.user.save();
+              res.json({ message: "Profile banner uploaded" });
+            }
+          },
+        );
+      });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -145,7 +138,7 @@ export default class userController {
 
       await registerService({
         email,
-        password,       
+        password,
         username,
       });
 
@@ -162,28 +155,26 @@ export default class userController {
       const { token } = await loginService(email, password);
 
       res.cookie("AUTH_TOKEN", token, {
-        httpOnly: true,        
+        httpOnly: true,
         sameSite: "none",
         secure: true,
-        maxAge: 7*24*60*60*1000
-      })
-      
-      res.json({message: "Iniciaste sesión correctamente"})
-      
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.json({ message: "Iniciaste sesión correctamente" });
     } catch (error) {
-      
       next(error);
     }
   }
-  static async logout(req,res,next){
-    try{
+  static async logout(req, res, next) {
+    try {
       res.clearCookie("AUTH_TOKEN", {
         httpOnly: true,
-        sameSite: "lax"
-      })
-      res.json({message: "Cerraste sesión correctamente"})
-    } catch(error){
-      next(error)
+        sameSite: "lax",
+      });
+      res.json({ message: "Cerraste sesión correctamente" });
+    } catch (error) {
+      next(error);
     }
   }
 }
