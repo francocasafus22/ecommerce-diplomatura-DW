@@ -20,8 +20,12 @@ import { toast } from "react-toastify";
 import { newNoteSchema } from "@/schemas/postSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Loading from "../ui/Loading";
+import { useState } from "react";
+import TextEditor from "../TextEditor";
 
 export default function NewNoteForm({ open, setOpen }) {
+  const [editorOpen, setEditorOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -85,10 +89,11 @@ export default function NewNoteForm({ open, setOpen }) {
               label={"Content (Support Markdown)"}
               name={"body"}
               required
-              placeholder={"Write your note here"}
+              placeholder={"Write or copy your note here "}
               register={register}
               error={errors.body?.message}
             />
+            <TextEditor open={editorOpen} setOpen={setEditorOpen} />
             <TagsInput
               label={"Tags"}
               name={"tags"}

@@ -1,6 +1,13 @@
 import { useRef } from "react";
+import { Dialog, DialogTrigger, DialogContent } from "./ui/dialog";
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Copy, Pen } from "lucide-react";
+import MarkdownView from "./MarkdownView";
+import { toast } from "react-toastify";
 
-export default function TextEditor({ value, onChange }) {
+export default function TextEditor({ open, setOpen }) {
+  const [value, onChange] = useState("");
   const textareaRef = useRef(null);
 
   const replaceLine = (line, newValue) => {
@@ -174,62 +181,89 @@ export default function TextEditor({ value, onChange }) {
     }, 0);
   };
 
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      toast.success("Copied!", {
+        autoClose: 1000,
+      });
+    } catch (err) {
+      toast.error("Failed to copy: ", err);
+    }
+  };
+
   return (
-    <div className="border rounded-lg w-full bg-white shadow-md">
-      {/* Toolbar */}
-      <div className="flex gap-2 border-b p-2 bg-gray-100">
-        <button onClick={actions.bold} className="btn">
-          <b>B</b>
-        </button>
-        <button onClick={actions.italic} className="btn italic">
-          I
-        </button>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className={"cursor-pointer"} variant={"default"} size={"sm"}>
+          <Pen />
+          Open Text Editor
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="lg:max-w-5xl! lg:w-full max-h-[90vh] overflow-y-auto py-10 border-none">
+        <div className="border border-border rounded-lg w-full bg-white">
+          {/* Toolbar */}
+          <div className="grid grid-cols-5 rounded-lg lg:flex gap-2 border-b p-2 bg-gray-100">
+            <button onClick={actions.bold} className="btn">
+              <b>B</b>
+            </button>
+            <button onClick={actions.italic} className="btn italic">
+              I
+            </button>
 
-        <button onClick={actions.h1} className="btn">
-          H1
-        </button>
-        <button onClick={actions.h2} className="btn">
-          H2
-        </button>
-        <button onClick={actions.h3} className="btn">
-          H3
-        </button>
+            <button onClick={actions.h1} className="btn">
+              H1
+            </button>
+            <button onClick={actions.h2} className="btn">
+              H2
+            </button>
+            <button onClick={actions.h3} className="btn">
+              H3
+            </button>
 
-        <button onClick={actions.bullet} className="btn">
-          •
-        </button>
-        <button onClick={actions.ordered} className="btn">
-          1.
-        </button>
+            <button onClick={actions.bullet} className="btn">
+              •
+            </button>
+            <button onClick={actions.ordered} className="btn">
+              1.
+            </button>
 
-        <button onClick={actions.clear} className="ml-auto text-red-500">
-          Clear
-        </button>
-      </div>
+            <button onClick={actions.clear} className="ml-auto text-red-500">
+              Clear
+            </button>
+          </div>
 
-      <div className="p-3">
-        <textarea
-          ref={textareaRef}
-          value={value}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full h-60 outline-none resize-none font-mono"
-          placeholder="Write your markdown..."
-        />
-      </div>
+          <div className="p-3">
+            <textarea
+              ref={textareaRef}
+              value={value}
+              onKeyDown={handleKeyDown}
+              onChange={(e) => onChange(e.target.value)}
+              className="w-full h-60 outline-none resize-none font-mono"
+              placeholder="Write your markdown..."
+            />
+          </div>
 
-      <style>{`
-        .btn {
-          padding: 4px 8px;
-          background: #e5e5e5;
-          border: 1px solid #ccc;
-          border-radius: 6px;
-          font-size: 14px;
-        }
-        .btn:hover {
-          background: #d5d5d5;
-        }
-      `}</style>
-    </div>
+          <style>{`
+              .btn {
+                padding: 4px 8px;
+                background: #e5e5e5;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 14px;
+              }
+              .btn:hover {
+                background: #d5d5d5;
+              }
+            `}</style>
+        </div>
+        <Button className={"cursor-pointer"} onClick={copyToClipboard}>
+          <Copy /> Copy Markdown
+        </Button>
+        <div className="border border-border rounded-lg p-10 overflow-auto h-100">
+          <MarkdownView content={value}></MarkdownView>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

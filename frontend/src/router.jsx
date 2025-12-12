@@ -8,7 +8,6 @@ import ProfilePage from "./pages/ProfilePage";
 import PublicLayout from "./layoutss/PublicLayout.jsx";
 import NotePage from "./pages/NotePage";
 import ExplorePage from "./pages/ExplorePage";
-import WriteNotePage from "./pages/WriteNotePage";
 
 export default function Router() {
   return (
@@ -20,7 +19,6 @@ export default function Router() {
       </Route>
       <Route element={<PublicLayout />}>
         <Route path="/" element={<HomePage />}></Route>
-        <Route path="/editor/write" element={<WriteNotePage />}></Route>
         <Route path="/note/:slug" element={<NotePage />}></Route>
         <Route path="/explore" element={<ExplorePage />}></Route>
         <Route path="/:username" element={<ProfilePage />}></Route>
