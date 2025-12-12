@@ -6,12 +6,20 @@ import { createToken } from "../utils/jwt.js";
 
 export async function editProfile({ data, user }) {
   try {
+    const userExist = await User.findOne({ username: data.username });
+    if (userExist) {
+      const error = new Error("The username is unavailable");
+      error.status = 403;
+      throw error;
+    }
     const forbiddenField = ["_id", "rol", "password"];
     forbiddenField.forEach((field) => delete data[field]);
 
     Object.assign(user, data);
 
     await user.save();
+
+    return user.username;
   } catch (error) {
     console.error("[EDIT PROFILE]".error, `Error: ${error.message}`);
     throw error;
@@ -40,14 +48,8 @@ export async function loginService(email, password) {
   return { token };
 }
 
-
-
-export async function registerService({
-  email,
-  password,
-  username,
-}) {
-  const userExist = await User.findOne({email});
+export async function registerService({ email, password, username }) {
+  const userExist = await User.findOne({ email });
 
   if (userExist) {
     const error = new Error("El email ya está en uso");
@@ -69,6 +71,6 @@ export async function registerService({
   await User.create({
     email,
     username: userSlug,
-    password: hashedPassword
+    password: hashedPassword,
   });
 }
