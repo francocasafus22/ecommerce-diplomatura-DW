@@ -107,7 +107,7 @@ npm run dev
 <h2 id="demo">🌐 Demo</h2>
 
 🚀 Puedes probar la aplicación aquí:
-👉 [Notitas - Demo en línea](https://notitasblog.netlify.app/)
+👉 [Notitas - Demo en línea](https://notitasblogapp.vercel.app)
 
 <h2 id="contacto">📬 Contacto</h2>
 
